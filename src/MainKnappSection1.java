@@ -1,5 +1,3 @@
-import java.io.File;
-
 public class MainKnappSection1 {
 
     public static void main(String[] args) {
@@ -8,7 +6,7 @@ public class MainKnappSection1 {
             System.exit(1);
         }
         else {
-            new KruskalsMSTKnappSection1(new File(args[0]));
+            new KruskalsMSTKnappSection1(args[0]);
         }
     }
 }
