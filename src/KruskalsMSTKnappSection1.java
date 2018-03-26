@@ -5,16 +5,14 @@ import java.util.*;
 public class KruskalsMSTKnappSection1 {
     private int vertices;
     private int max_edges;
-    private PriorityQueue<Edge> edge_queue;
     private LinkedList<Edge> mst;
 
-    public KruskalsMSTKnappSection1(String file) {
-        initializeHeap(new File(file));
-        System.out.println(findMST());
+    KruskalsMSTKnappSection1(String file) {
+        System.out.println(findMST(new File(file)));
     }
 
-    private void initializeHeap(File dataFile) {
-        edge_queue = new PriorityQueue<>();
+    private PriorityQueue<Edge> initializeHeap(File dataFile) {
+        PriorityQueue<Edge> local_queue = new PriorityQueue<>();
         try {
             Scanner in = new Scanner(dataFile);
             while (in.findInLine("c ") != null) {
@@ -23,15 +21,17 @@ public class KruskalsMSTKnappSection1 {
             vertices = in.nextInt();
             max_edges = vertices - 1;
             while(in.hasNextLine()) {
-                edge_queue.offer(new Edge(in.nextInt(), in.nextInt(), in.nextInt()));
+                local_queue.offer(new Edge(in.nextInt(), in.nextInt(), in.nextInt()));
             }
         }
         catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        return local_queue;
     }
 
-    private String findMST() {
+    private String findMST(File dataFile) {
+        PriorityQueue<Edge> edge_queue = initializeHeap(dataFile);
         WeightedQuickUnionPathCompression uf = new WeightedQuickUnionPathCompression(vertices);
         mst = new LinkedList<>();
         while (mst.size() < max_edges){
