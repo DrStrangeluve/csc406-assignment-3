@@ -1,16 +1,36 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class KruskalsMSTKnappSection1 {
     private int vertices;
     private int max_edges;
+    private Writer writer;
     private PriorityQueue<Edge> edge_queue;
     private LinkedList<Edge> mst;
 
-    public KruskalsMSTKnappSection1(String file) {
-        initializeHeap(new File(file));
-        System.out.println(findMST());
+    KruskalsMSTKnappSection1(String file) {
+        createOutputFile("output.txt");
+        findMST(new File(file));
+    }
+
+    private void createOutputFile(String fileName) {
+        try {
+            writer = new PrintWriter(fileName);
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void write(String s) {
+        try {
+            writer.write(s);
+            writer.flush();
+
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeHeap(File dataFile) {
@@ -31,19 +51,23 @@ public class KruskalsMSTKnappSection1 {
             }
     }
 
-    private String findMST() {
+    private void findMST(File dataFile) {
+        initializeHeap(dataFile);
         WeightedQuickUnionPathCompression uf = new WeightedQuickUnionPathCompression(vertices);
         mst = new LinkedList<>();
-        while (mst.size() < max_edges){
+        int totalWeight = 0;
+        while (mst.size() < max_edges) {
             Edge e = edge_queue.remove();
             int first_vertex = e.getVertex();
             int other_vertex = e.getOtherVertex(first_vertex);
-            if (uf.find(first_vertex) != uf.find(other_vertex)){
+            if (uf.find(first_vertex) != uf.find(other_vertex)) {
                 mst.add(e);
+                totalWeight += e.getWeight();
                 uf.union(first_vertex, other_vertex);
+                write(e.toString());
             }
         }
-        return toString();
+        write(String.format("%d", totalWeight));
     }
 
     public String toString() {

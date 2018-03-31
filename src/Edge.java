@@ -10,11 +10,11 @@ class Edge implements Comparable<Edge>
         this.weight = weight;
     }
 
-    public int getVertex(){
+    int getVertex(){
         return u;
     }
 
-    public int getOtherVertex(int vertex){
+    int getOtherVertex(int vertex){
         if (vertex == u){
             return v;
         }
@@ -23,7 +23,7 @@ class Edge implements Comparable<Edge>
         }
     }
 
-    public int getWeight(){
+    int getWeight(){
         return weight;
     }
 
@@ -33,6 +33,6 @@ class Edge implements Comparable<Edge>
     }
 
     public String toString(){
-        return String.format("(%d, %d, %d)", u, v, weight);
+        return String.format("%d %d %d%n", u, v, weight);
     }
 }
