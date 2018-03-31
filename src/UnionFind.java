@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 import static java.lang.Math.abs;
@@ -74,14 +76,11 @@ class WeightedQuickUnion extends UnionFind{
 
     public WeightedQuickUnion(int n) {
         super(n);
-        for (int i = 1; i <= n; i++) {
-            makeSet(i);
-        }
+        makeSet();
     }
 
-    private void makeSet(int x) {
-        int initial_value = -1;
-        partition[x] = initial_value;
+    private void makeSet() {
+        Arrays.fill(partition, -1);
     }
 
     public int find(int x) {
@@ -94,6 +93,7 @@ class WeightedQuickUnion extends UnionFind{
         }
     }
 
+    //return as bool
     public void union(int i, int j) {
         int i_parent = find(i);
         int j_parent = find(j);
