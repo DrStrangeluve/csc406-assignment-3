@@ -93,12 +93,11 @@ class WeightedQuickUnion extends UnionFind{
         }
     }
 
-    //return as bool
-    public void union(int i, int j) {
+    public boolean union(int i, int j) {
         int i_parent = find(i);
         int j_parent = find(j);
         if (i_parent == j_parent) {
-            return; //parents are the same, thus they are already joined
+            return false; //parents are the same, thus they are already joined
         }
         int x = partition[i_parent];
         int y = partition[j_parent];
@@ -110,6 +109,7 @@ class WeightedQuickUnion extends UnionFind{
             partition[i_parent] = change_to;
             partition[j_parent] = i_parent;
         }
+        return true;
     }
 }
 

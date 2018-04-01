@@ -9,7 +9,6 @@ public class KruskalsMSTKnappSection1 {
     private LinkedList<Edge> mst;
 
     KruskalsMSTKnappSection1(String file) {
-        createOutputFile("output.txt");
         findMST(new File(file));
     }
 
@@ -48,10 +47,11 @@ public class KruskalsMSTKnappSection1 {
         }
         catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
+        }
     }
 
     private void findMST(File dataFile) {
+        createOutputFile("mst_output.txt");
         initializeHeap(dataFile);
         WeightedQuickUnionPathCompression uf = new WeightedQuickUnionPathCompression(vertices);
         mst = new LinkedList<>();
@@ -60,10 +60,9 @@ public class KruskalsMSTKnappSection1 {
             Edge e = edge_queue.remove();
             int first_vertex = e.getVertex();
             int other_vertex = e.getOtherVertex(first_vertex);
-            if (uf.find(first_vertex) != uf.find(other_vertex)) {
+            if ( uf.union(first_vertex, other_vertex)) {
                 mst.add(e);
                 totalWeight += e.getWeight();
-                uf.union(first_vertex, other_vertex);
                 write(e.toString());
             }
         }
