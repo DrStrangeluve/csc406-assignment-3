@@ -93,7 +93,7 @@ public class OBSTKnappSection1 {
             }
         }
         matrixToString(cost_root_matrix);
-        WeightedQuickUnion uf = new WeightedQuickUnion(num_keys);
+        WeightedQuickUnionPathCompression uf = new WeightedQuickUnionPathCompression(num_keys);
         matrixToParenthesizedExp(num_keys+1, 0, uf); // start at the bottom left corner of matrix, which is the root
         System.out.print("Bagel");
     }
@@ -132,10 +132,7 @@ public class OBSTKnappSection1 {
     private void matrixToString(BigDecimal[][] matrix){
         int counter = 0;
         for(BigDecimal[] row : matrix) {
-            if (counter == 0){
-                ;
-            }
-            else {
+            if (counter != 0){
                 printRow(row);
             }
             counter++;
