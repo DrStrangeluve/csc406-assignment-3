@@ -46,12 +46,22 @@ public class OBSTKnappSection1 {
             }
             probabilities = new BigDecimal[num_keys+1];
             for (int i = 1; i <= num_keys; i++){
-                probabilities[i] = in.nextBigDecimal();
+                probabilities[i] = parseBigDecial(in.next());
             }
             cost_root_matrix = new BigDecimal[num_keys+2][num_keys+1];
         }
         catch (FileNotFoundException e){
             e.printStackTrace();
+        }
+    }
+
+    private BigDecimal parseBigDecial(String next) {
+        if (next.contains("/")){
+            String[] fraction = next.split("/");
+            return new BigDecimal(Double.parseDouble(fraction[0]) / Double.parseDouble(fraction[1]));
+        }
+        else {
+            return new BigDecimal(next);
         }
     }
 
@@ -83,36 +93,38 @@ public class OBSTKnappSection1 {
             }
         }
         matrixToString(cost_root_matrix);
-
-        matrixToParenthesizedExp(num_keys+1, 0); // start at the bottom left corner of matrix, which is the root
+        WeightedQuickUnion uf = new WeightedQuickUnion(num_keys);
+        matrixToParenthesizedExp(num_keys+1, 0, uf); // start at the bottom left corner of matrix, which is the root
+        System.out.print("Bagel");
     }
 
-    private void matrixToParenthesizedExp(int i, int j){
+    private void matrixToParenthesizedExp(int i, int j, WeightedQuickUnion uf){
         if (num_keys > 0) {
             int start_i = i;
             int start_j = j;
             write(cost_root_matrix[i][j].toString());
-            keys[cost_root_matrix[i][j].intValue()] += "!";
             num_keys--;
             if (num_keys > 0) {
-                while (cost_root_matrix[i][j].compareTo(new BigDecimal(0)) > 0) {
-                    if (cost_root_matrix[i][j].compareTo(cost_root_matrix[start_i][start_j]) != 0 && !keys[cost_root_matrix[i][j].intValue()].endsWith("!")) {
-                        write("(");
-                        matrixToParenthesizedExp(i, j);
-                        write(")");
-                    }
+                while (cost_root_matrix[i][j].intValue() == cost_root_matrix[start_i][start_j].intValue()) {
                     j++;
                 }
+                findSubtree(i, j, uf, start_i, start_j);
                 i = start_i;
                 j = start_j;
-                while (cost_root_matrix[i][j].compareTo(new BigDecimal(0)) > 0) {
-                    if (cost_root_matrix[i][j].compareTo(cost_root_matrix[start_i][start_j]) != 0 && !keys[cost_root_matrix[i][j].intValue()].endsWith("!")) {
-                        write("(");
-                        matrixToParenthesizedExp(i, j);
-                        write(")");
-                    }
+                while (cost_root_matrix[i][j].intValue() == cost_root_matrix[start_i][start_j].intValue()) {
                     i--;
                 }
+                findSubtree(i, j, uf, start_i, start_j);
+            }
+        }
+    }
+
+    private void findSubtree(int i, int j, WeightedQuickUnion uf, int start_i, int start_j) {
+        if (cost_root_matrix[i][j].compareTo(new BigDecimal(0)) > 0) {
+            if (uf.union(cost_root_matrix[start_i][start_j].intValue(), cost_root_matrix[i][j].intValue())) {
+                write("(");
+                matrixToParenthesizedExp(i, j, uf);
+                write(")");
             }
         }
     }
