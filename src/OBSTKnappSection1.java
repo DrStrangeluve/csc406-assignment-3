@@ -95,7 +95,6 @@ public class OBSTKnappSection1 {
         matrixToString(cost_root_matrix);
         WeightedQuickUnionPathCompression uf = new WeightedQuickUnionPathCompression(num_keys);
         matrixToParenthesizedExp(num_keys+1, 0, uf); // start at the bottom left corner of matrix, which is the root
-        System.out.print("Bagel");
     }
 
     private void matrixToParenthesizedExp(int i, int j, WeightedQuickUnion uf){
